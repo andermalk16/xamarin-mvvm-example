@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Cats.Models
@@ -12,14 +13,9 @@ namespace Cats.Models
 
 		public async Task<List<Cat>> GetCats()
 		{
-			List<Cat> cats;
-			var URLWebAPI = "http://demos.ticapacitacion.com/cats";
-			using (var Client = new System.Net.Http.HttpClient())
-			{
-				var JSON = await Client.GetStringAsync(URLWebAPI);
-				cats = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Cat>>(JSON);
-			}
-			return cats;
+			var Service = new Services.AzureService<Cat>();
+			var Items = await Service.GetTable();
+			return Items.ToList();
 		}
 	}
 }
